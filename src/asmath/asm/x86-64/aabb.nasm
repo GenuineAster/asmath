@@ -6,11 +6,12 @@
 
 section .data
 section .bss
-	aabb_i32:
+	struc aabb_i32
 		.left: resd 1
 		.top: resd 1
 		.right: resd 1
 		.bottom: resd 1
+	endstruc
 
 section .text
 	global aabb_intersects_i32:function
@@ -57,26 +58,26 @@ section .text
 		; set ecx to 0, as we'll be using it for our OR accumulator
 		xor ecx, ecx
 		; load B.left into eax, A.right into ebx, and compare for greater-than
-		mov eax, dword [rdi + (aabb_i32.left - aabb_i32)]
-		mov ebx, dword [rsi + (aabb_i32.right - aabb_i32)]
+		mov eax, dword [rdi + (aabb_i32.left)]
+		mov ebx, dword [rsi + (aabb_i32.right)]
 		cmp eax, ebx
 		; place the result of the comparison in cl
 		setg cl
 		; ... repeat
-		mov eax, dword [rdi + (aabb_i32.right - aabb_i32)]
-		mov ebx, dword [rsi + (aabb_i32.left - aabb_i32)]
+		mov eax, dword [rdi + (aabb_i32.right)]
+		mov ebx, dword [rsi + (aabb_i32.left)]
 		cmp eax, ebx
 		; place the result of the comparison in ch
 		setle ch
 		; or cl and ch, repeat
 		or cl, ch
-		mov eax, dword [rdi + (aabb_i32.top - aabb_i32)]
-		mov ebx, dword [rsi + (aabb_i32.bottom - aabb_i32)]
+		mov eax, dword [rdi + (aabb_i32.top)]
+		mov ebx, dword [rsi + (aabb_i32.bottom)]
 		cmp eax, ebx
 		setg ch
 		or cl, ch
-		mov eax, dword [rdi + (aabb_i32.bottom - aabb_i32)]
-		mov ebx, dword [rsi + (aabb_i32.top - aabb_i32)]
+		mov eax, dword [rdi + (aabb_i32.bottom)]
+		mov ebx, dword [rsi + (aabb_i32.top)]
 		cmp eax, ebx
 		setle ch
 		or cl, ch
